@@ -35,18 +35,3 @@ dnf5 install -y ddev
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
-
-## ddev related podman configuration
-if [ -f /proc/sys/user/max_user_namespaces ]; then
-  if [ "0" = "$(cat /proc/sys/user/max_user_namespaces)" ]; then
-    echo 'user.max_user_namespaces=28633' | sudo tee -a /etc/sysctl.d/60-rootless.conf
-    sudo sysctl --system
-  fi
-fi
-# Allow privileged port access if needed
-if [ -f /proc/sys/net/ipv4/ip_unprivileged_port_start ]; then
-  if [ "1024" = "$(cat /proc/sys/net/ipv4/ip_unprivileged_port_start)" ]; then
-    echo 'net.ipv4.ip_unprivileged_port_start=0' | sudo tee -a /etc/sysctl.d/60-rootless.conf
-    sudo sysctl --system
-  fi
-fi
